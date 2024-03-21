@@ -2,10 +2,6 @@
 // Created by andre on 21/03/2024.
 //
 
-//
-// Created by andre on 21/03/2024.
-//
-
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -133,33 +129,47 @@ void limpar_arvore(arvoreB *r) {
     free(r); // Libere o nó atual
 }
 
+void imprimir_arvore(arvoreB *r, int nivel) {
+    if (r == NULL) // Caso base: se o nó for nulo, retorne
+        return;
+
+    int i;
+    for (i = 0; i < r->numChaves; i++) {
+        imprimir_arvore(r->filho[i], nivel + 1); // Imprima os filhos recursivamente
+        printf("Nivel %d, Chave %d\n", nivel, r->chave[i]); // Imprima a chave do nó
+    }
+
+    imprimir_arvore(r->filho[i], nivel + 1); // Imprima o último filho recursivamente
+}
+
 
 int main(){
     arvoreB * raiz = inicializa_arvore();
 
+    raiz = insere(raiz, 89);
     raiz = insere(raiz, 50);
     raiz = insere(raiz, 10);
     raiz = insere(raiz, 15);
     raiz = insere(raiz, 20);
     raiz = insere(raiz, 70);
+    raiz = insere(raiz, 12);
+    raiz = insere(raiz, 16);
+    raiz = insere(raiz, 18);
     raiz = insere(raiz, 80);
     raiz = insere(raiz, 6);
     raiz = insere(raiz, 8);
     raiz = insere(raiz, 11);
-    raiz = insere(raiz, 12);
-    raiz = insere(raiz, 16);
-    raiz = insere(raiz, 18);
-    raiz = insere(raiz, 21);
-    raiz = insere(raiz, 25);
-    raiz = insere(raiz, 27);
-    raiz = insere(raiz, 29);
     raiz = insere(raiz, 54);
     raiz = insere(raiz, 56);
     raiz = insere(raiz, 71);
     raiz = insere(raiz, 76);
+    raiz = insere(raiz, 21);
+    raiz = insere(raiz, 29);
     raiz = insere(raiz, 81);
-    raiz = insere(raiz, 89);
+    raiz = insere(raiz, 25);
+    raiz = insere(raiz, 27);
 
+    imprimir_arvore(raiz, 0);
     limpar_arvore(raiz);
 
     return 0;
