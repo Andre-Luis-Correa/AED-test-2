@@ -195,7 +195,6 @@ int busca_k_esima(arvoreB* r, int k) {
     return ultimo_elemento_contagem(r, &k);
 }
 
-
 int main(){
     arvoreB * raiz = inicializa_arvore();
 
