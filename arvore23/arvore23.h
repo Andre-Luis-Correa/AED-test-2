@@ -19,7 +19,7 @@ struct no23 {
 
 typedef struct no23* arvore23; //árvore é um ponteiro para um nó
 
-arvore23 criaNo23(int chave_esq, int chave_dir,arvore23 esq, arvore23 meio, arvore23 dir, int n){
+arvore23 criaNo23(int chave_esq, int chave_dir, arvore23 esq, arvore23 meio, arvore23 dir, int n){
     arvore23 novoNo = (struct no23*)malloc(sizeof(struct no23));
     novoNo->chave_esq = chave_esq;
     novoNo->chave_dir = chave_dir;
@@ -50,9 +50,7 @@ arvore23 busca(arvore23 r, int chave){
         return r;
     if(chave < r->chave_esq)
         return busca(r->esq, chave);
-    else if(r->n == 1)
-        return busca(r->meio, chave);
-    else if(chave < r->chave_dir)
+    else if(r->n == 1 || chave < r->chave_dir)
         return busca(r->meio, chave);
     else
         return busca(r->dir, chave);
@@ -137,14 +135,13 @@ arvore23 inserir_aux(arvore23 r, int chave, int *chave_promovida) {
 arvore23 inserir(arvore23 r, int chave){
     if(vazia(r))  // caso base especial: a árvore é vazia
         return criaNo23(chave, 0, NULL, NULL, NULL, 1);
-    else {
-        int chave_promovida;
-        arvore23 aux = inserir_aux(r, chave, &chave_promovida);
-        if(!vazia(aux)) // cria nova raiz
-            return criaNo23(chave_promovida, 0,r,aux,NULL,1);
-        else // raiz não se altera
-            return r;
-    }
+
+    int chave_promovida;
+    arvore23 aux = inserir_aux(r, chave, &chave_promovida);
+    if(!vazia(aux)) // cria nova raiz
+        return criaNo23(chave_promovida, 0,r,aux,NULL,1);
+
+    return r; // raiz não se altera
 }
 
 // Função para imprimir uma árvore 23 em ordem (in-order traversal)
@@ -159,6 +156,7 @@ void imprimir_in_order(arvore23 raiz) {
         // Percorre a sub-árvore do meio (se existir)
         imprimir_in_order(raiz->meio);
 
+        if(raiz->n == 2)
         // Imprime a chave direita (se existir)
         printf("%d ", raiz->chave_dir);
 
