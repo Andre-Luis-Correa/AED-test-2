@@ -156,63 +156,43 @@ void imprimir_arvore(arvoreB *r, int nivel) {
     imprimir_arvore(r->filho[i], nivel + 1); // Imprima o último filho recursivamente
 }
 
+// Função para retornar o valor do último elemento até o fim da contagem
+int ultimo_elemento_contagem(arvoreB *r, int *contagem) {
+    if (r == NULL || *contagem <= 0) // Caso base: se o nó for nulo ou já tivermos retornado todas as chaves desejadas, retorne
+        return -1;
+
+    // Variável para armazenar o último elemento encontrado
+    int ultimo_elemento = -1;
+
+    // Percorre os filhos da árvore recursivamente
+    for (int i = r->numChaves; i >= 0; i--) {
+        // Busca recursivamente nos filhos
+        int chave = ultimo_elemento_contagem(r->filho[i], contagem);
+        // Se a chave foi encontrada em um dos filhos, atualize o último elemento
+        if (chave != -1)
+            ultimo_elemento = chave;
+    }
+
+    // Percorre as chaves do nó atual
+    for (int i = 0; i < r->numChaves && *contagem > 0; i++) {
+        // Atualiza o último elemento
+        ultimo_elemento = r->chave[i];
+        (*contagem)--; // Decrementa o contador de chaves
+
+        // Se já retornamos todas as chaves desejadas, pare
+        if (*contagem <= 0)
+            return ultimo_elemento;
+    }
+
+    // Retorna o último elemento encontrado
+    return ultimo_elemento;
+}
+
 //pré-condição: k > 0
 // Função para buscar a k-ésima chave em uma árvore B
 int busca_k_esima(arvoreB* r, int k) {
-    if (r == NULL || k <= 0) // Caso base: se o nó for nulo ou k for inválido, retorne -1
-        return -1;
-
-    // Variável para armazenar a contagem de chaves
-    int contagem = k;
-
-    // Percorre os filhos da árvore
-    for (int i = 0; i <= r->numChaves; i++) {
-        // Busca recursivamente nos filhos
-        int chave = busca_k_esima(r->filho[i], contagem);
-        // Se a chave foi encontrada em um dos filhos, retorne-a
-        if (chave != -1)
-            return chave;
-    }
-
-    // Se chegamos até aqui, significa que não encontramos a chave nos filhos
-    // Portanto, verifique se a chave está neste nó
-    for (int i = 0; i < r->numChaves; i++) {
-        // Decrementa a contagem
-        contagem--;
-        // Se a contagem chegou a zero, encontramos a k-ésima chave
-        if (contagem == 0)
-            return r->chave[i];
-    }
-
-    // Se chegamos aqui, a k-ésima chave não foi encontrada nesta subárvore
-    return -1;
+    return ultimo_elemento_contagem(r, &k);
 }
-
-
-void imprimir_primeiras_chaves(arvoreB *r, int *contagem) {
-    if (r == NULL) // Caso base: se o nó for nulo ou já tivermos imprimido todas as chaves desejadas, retorne
-        return;
-
-    // Imprime as chaves dos filhos recursivamente
-    for (int i = r->numChaves; i >= 0; i--) {
-        imprimir_primeiras_chaves(r->filho[i], contagem);
-    }
-
-    // Imprime as chaves do nó atual
-    for (int i = 0; i < r->numChaves && *contagem > 0; i++) {
-        // Imprime a chave do nó atual
-        (*contagem)--; // Decrementa o contador de chaves
-        printf("Chave %d\n", r->chave[i]);
-
-        // Se já imprimimos todas as chaves desejadas, pare
-        if (*contagem <= 0)
-            return;
-
-    }
-}
-
-
-
 
 
 int main(){
@@ -250,14 +230,8 @@ int main(){
     printf("Resultado = %d para k = %d \n", busca_k_esima(raiz, 50), 50);
 
     imprimir_arvore(raiz, 0);
-
-
-    printf("\n\n");
-    int contagem = 6;
-    imprimir_primeiras_chaves(raiz, &contagem);
-
-    //imprimir_arvore_posicao(raiz, 6);
-    //imprimir_arvore_posicao(raiz, 22);
+    int k = 6;
+    printf("Ultimo elemento: %d\n", busca_k_esima(raiz, k));
 
     limpar_arvore(raiz);
 
