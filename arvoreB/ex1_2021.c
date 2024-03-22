@@ -191,6 +191,7 @@ int ultimo_elemento_contagem(arvoreB *r, int *contagem) {
 //pré-condição: k > 0
 // Função para buscar a k-ésima chave em uma árvore B
 int busca_k_esima(arvoreB* r, int k) {
+    if(r == NULL || k > contarChaves(r)) return -1;
     return ultimo_elemento_contagem(r, &k);
 }
 
@@ -230,7 +231,7 @@ int main(){
     printf("Resultado = %d para k = %d \n", busca_k_esima(raiz, 50), 50);
 
     imprimir_arvore(raiz, 0);
-    int k = 6;
+    int k = 8;
     printf("Ultimo elemento: %d\n", busca_k_esima(raiz, k));
 
     limpar_arvore(raiz);
