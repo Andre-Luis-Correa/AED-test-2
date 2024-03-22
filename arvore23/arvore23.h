@@ -35,8 +35,8 @@ int vazia(arvore23 r){
 }
 
 // Função para verificar se um nó é uma folha
-int eh_folha(arvore23 p) {
-    return p->esq == NULL;
+int eh_folha(arvore23 r) {
+    return r->esq == NULL;
 }
 
 // Retorno: ponteiro para o nó contendo a chave ou
@@ -54,7 +54,8 @@ arvore23 busca(arvore23 r, int chave){
         return busca(r->meio, chave);
     else if(chave < r->chave_dir)
         return busca(r->meio, chave);
-    else return busca(r->dir, chave);
+    else
+        return busca(r->dir, chave);
 }
 
 arvore23 split(arvore23 p, int chave, arvore23 subarvore, int *chave_promovida) {
@@ -84,9 +85,9 @@ arvore23 split(arvore23 p, int chave, arvore23 subarvore, int *chave_promovida) 
     return paux;
 }
 
-// Adiciona uma chave em um n´o que tem 1 chave
-// Pr´e-condi¸c~ao: n´o r tem somente uma chave
-// P´os-condi¸c~ao: insere chave no n´o r com sub´arvore p
+// Adiciona uma chave em um nó que tem 1 chave
+// Pré-condição: nó r tem somente uma chave
+// Pós-condição: insere chave no nó r com sub-árvore p
 void adicionaChave(arvore23 r, int chave, arvore23 p) {
     if(r->chave_esq < chave) {
         r->chave_dir = chave;
@@ -134,15 +135,35 @@ arvore23 inserir_aux(arvore23 r, int chave, int *chave_promovida) {
 
 // Insere a chave na árvore 2-3
 arvore23 inserir(arvore23 r, int chave){
-    if(vazia(r)) // caso base especial: a ´arvore ´e vazia
-        return criaNo23(chave,0,NULL,NULL,NULL,1);
+    if(vazia(r))  // caso base especial: a árvore é vazia
+        return criaNo23(chave, 0, NULL, NULL, NULL, 1);
     else {
         int chave_promovida;
-        arvore23 aux = inserir_aux(r,chave,&chave_promovida);
+        arvore23 aux = inserir_aux(r, chave, &chave_promovida);
         if(!vazia(aux)) // cria nova raiz
             return criaNo23(chave_promovida, 0,r,aux,NULL,1);
-        else // raiz n~ao se altera
+        else // raiz não se altera
             return r;
+    }
+}
+
+// Função para imprimir uma árvore 23 em ordem (in-order traversal)
+void imprimir_in_order(arvore23 raiz) {
+    if (!vazia(raiz)) {
+        // Percorre a sub-árvore esquerda
+        imprimir_in_order(raiz->esq);
+
+        // Imprime a chave esquerda (se existir)
+        printf("%d ", raiz->chave_esq);
+
+        // Percorre a sub-árvore do meio (se existir)
+        imprimir_in_order(raiz->meio);
+
+        // Imprime a chave direita (se existir)
+        printf("%d ", raiz->chave_dir);
+
+        // Percorre a sub-árvore direita
+        imprimir_in_order(raiz->dir);
     }
 }
 
