@@ -158,23 +158,90 @@ void imprimir_arvore(arvoreB *r, int nivel) {
 
 //pré-condição: k > 0
 // Função para buscar a k-ésima chave em uma árvore B
-// Função para buscar a k-ésima chave em uma árvore B
 int busca_k_esima(arvoreB* r, int k) {
+    if (r == NULL || k <= 0) // Caso base: se o nó for nulo ou k for inválido, retorne -1
+        return -1;
 
+    // Variável para armazenar a contagem de chaves
+    int contagem = k;
+
+    // Percorre os filhos da árvore
+    for (int i = 0; i <= r->numChaves; i++) {
+        // Busca recursivamente nos filhos
+        int chave = busca_k_esima(r->filho[i], contagem);
+        // Se a chave foi encontrada em um dos filhos, retorne-a
+        if (chave != -1)
+            return chave;
+    }
+
+    // Se chegamos até aqui, significa que não encontramos a chave nos filhos
+    // Portanto, verifique se a chave está neste nó
+    for (int i = 0; i < r->numChaves; i++) {
+        // Decrementa a contagem
+        contagem--;
+        // Se a contagem chegou a zero, encontramos a k-ésima chave
+        if (contagem == 0)
+            return r->chave[i];
+    }
+
+    // Se chegamos aqui, a k-ésima chave não foi encontrada nesta subárvore
+    return -1;
 }
+
+
+void imprimir_primeiras_chaves(arvoreB *r, int *contagem) {
+    if (r == NULL) // Caso base: se o nó for nulo ou já tivermos imprimido todas as chaves desejadas, retorne
+        return;
+
+    // Imprime as chaves dos filhos recursivamente
+    for (int i = r->numChaves; i >= 0; i--) {
+        imprimir_primeiras_chaves(r->filho[i], contagem);
+    }
+
+    // Imprime as chaves do nó atual
+    for (int i = 0; i < r->numChaves && *contagem > 0; i++) {
+        // Imprime a chave do nó atual
+        (*contagem)--; // Decrementa o contador de chaves
+        printf("Chave %d\n", r->chave[i]);
+
+        // Se já imprimimos todas as chaves desejadas, pare
+        if (*contagem <= 0)
+            return;
+
+    }
+}
+
+
+
 
 
 int main(){
     arvoreB * raiz = inicializa_arvore();
 
-    raiz = insere(raiz, 89);
     raiz = insere(raiz, 50);
     raiz = insere(raiz, 10);
     raiz = insere(raiz, 15);
     raiz = insere(raiz, 20);
+    raiz = insere(raiz, 70);
+    raiz = insere(raiz, 80);
     raiz = insere(raiz, 6);
+    raiz = insere(raiz, 8);
+    raiz = insere(raiz, 11);
+    raiz = insere(raiz, 12);
+    raiz = insere(raiz, 16);
+    raiz = insere(raiz, 18);
+    raiz = insere(raiz, 21);
+    raiz = insere(raiz, 25);
+    raiz = insere(raiz, 27);
+    raiz = insere(raiz, 29);
+    raiz = insere(raiz, 54);
+    raiz = insere(raiz, 56);
+    raiz = insere(raiz, 71);
+    raiz = insere(raiz, 76);
+    raiz = insere(raiz, 81);
+    raiz = insere(raiz, 89);
 
-    printf("%d\n", contarChaves(raiz));
+    printf("total chaves: %d\n", contarChaves(raiz));
 
     printf("Resultado = %d para k = %d \n", busca_k_esima(raiz, 1), 1);
     printf("Resultado = %d para k = %d \n", busca_k_esima(raiz, 6), 6);
@@ -183,6 +250,15 @@ int main(){
     printf("Resultado = %d para k = %d \n", busca_k_esima(raiz, 50), 50);
 
     imprimir_arvore(raiz, 0);
+
+
+    printf("\n\n");
+    int contagem = 6;
+    imprimir_primeiras_chaves(raiz, &contagem);
+
+    //imprimir_arvore_posicao(raiz, 6);
+    //imprimir_arvore_posicao(raiz, 22);
+
     limpar_arvore(raiz);
 
     return 0;
