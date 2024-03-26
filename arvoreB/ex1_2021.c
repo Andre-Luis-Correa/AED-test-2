@@ -7,7 +7,7 @@
 
 // Função para retornar o valor do último elemento até o fim da contagem
 int ultimo_elemento_contagem(arvoreB *r, int *contagem) {
-    if (r == NULL || *contagem <= 0) // Caso base: se o nó for nulo ou já tivermos retornado todas as chaves desejadas, retorne
+    if (vazia(r) || *contagem <= 0) // Caso base: se o nó for nulo ou já tivermos retornado todas as chaves desejadas, retorne
         return -1;
 
     // Variável para armazenar o último elemento encontrado
@@ -53,27 +53,27 @@ int main(){
     raiz = insere(raiz, 20);
     raiz = insere(raiz, 70);
     raiz = insere(raiz, 80);
-    raiz = insere(raiz, 6);
-    raiz = insere(raiz, 8);
-    raiz = insere(raiz, 11);
-    raiz = insere(raiz, 12);
-    raiz = insere(raiz, 16);
-    raiz = insere(raiz, 18);
-    raiz = insere(raiz, 21);
-    raiz = insere(raiz, 25);
-    raiz = insere(raiz, 27);
-    raiz = insere(raiz, 29);
-    raiz = insere(raiz, 54);
-    raiz = insere(raiz, 56);
-    raiz = insere(raiz, 71);
-    raiz = insere(raiz, 76);
-    raiz = insere(raiz, 81);
+//    raiz = insere(raiz, 6);
+//    raiz = insere(raiz, 8);
+//    raiz = insere(raiz, 11);
+//    raiz = insere(raiz, 12);
+//    raiz = insere(raiz, 16);
+//    raiz = insere(raiz, 18);
+//    raiz = insere(raiz, 21);
+//    raiz = insere(raiz, 25);
+//    raiz = insere(raiz, 27);
+//    raiz = insere(raiz, 29);
+//    raiz = insere(raiz, 54);
+//    raiz = insere(raiz, 56);
+//    raiz = insere(raiz, 71);
+//    raiz = insere(raiz, 76);
+//    raiz = insere(raiz, 81);
     raiz = insere(raiz, 89);
 
     printf("total chaves: %d\n", contarChaves(raiz));
 
     printf("Resultado = %d para k = %d \n", busca_k_esima(raiz, 1), 1);
-    printf("Resultado = %d para k = %d \n", busca_k_esima(raiz, 6), 6);
+    printf("Resultado = %d para k = %d \n", busca_k_esima(raiz, 4), 4);
     printf("Resultado = %d para k = %d \n", busca_k_esima(raiz, 22), 22);
     printf("Resultado = %d para k = %d \n", busca_k_esima(raiz, 23), 23);
     printf("Resultado = %d para k = %d \n", busca_k_esima(raiz, 50), 50);

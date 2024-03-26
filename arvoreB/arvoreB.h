@@ -19,7 +19,7 @@ typedef struct no{
 } arvoreB;
 
 int vazia(arvoreB* r){
-    return r->numChaves == 0;
+    return r == NULL;
 }
 
 int overflow(arvoreB* r){
