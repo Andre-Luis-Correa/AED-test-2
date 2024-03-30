@@ -8,21 +8,16 @@
 int main(){
     arvoreAVL r = NULL;
 
-    int retornoInsercao = insercao(&r, 10);
-    retornoInsercao = insercao(&r, 1);
-    retornoInsercao = insercao(&r, 2);
-    retornoInsercao = insercao(&r, 11);
-    retornoInsercao = insercao(&r, 45);
-    retornoInsercao = insercao(&r, 14);
-    retornoInsercao = insercao(&r, 6);
-    retornoInsercao = insercao(&r, 3);
-    retornoInsercao = insercao(&r, 50);
-    retornoInsercao = insercao(&r, 13);
+    insercao(&r, 9);
+    insercao(&r, 3);
+    insercao(&r, 27);
+    insercao(&r, 11);
+    insercao(&r, 31);
 
     imprimir(r);
     printf("\n");
-    remover(&r, 2);
-    remover(&r, 50);
+    printf("%d\n", remover(&r, 27));
+    //remover(&r, 31);
     imprimir(r);
 
     return 0;
