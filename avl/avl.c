@@ -20,6 +20,10 @@ int main(){
     retornoInsercao = insercao(&r, 13);
 
     imprimir(r);
+    printf("\n");
+    remover(&r, 2);
+    remover(&r, 50);
+    imprimir(r);
 
     return 0;
 }
