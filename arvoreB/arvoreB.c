@@ -4,33 +4,12 @@
 
 #include <stdio.h>
 #include "arvoreB.h"
-//
-//int busca_k_esima(arvoreB* r, int k) {
-//    if (r == NULL || k > contarChaves(r))
-//        return -1;
-//
-//    int tam_arvore_esq = (r->filho[0] != NULL) ? r->filho[0]->numChaves : 0;
-//    printf("Tamanho da subtree esquerda = %d\n", tam_arvore_esq);
-//    int i;
-//
-//    // Find the appropriate child to visit
-//    for (i = 0; i < r->numChaves; i++) {
-//        if (k < tam_arvore_esq) { // a chave está no filho
-//            return busca_k_esima(r->filho[i], k);
-//        } else if (k == tam_arvore_esq && i != r->numChaves) { // Chave está aqui
-//            return r->chave[i];
-//        } else {
-//            k -= tam_arvore_esq + 1;
-//        }
-//    }
-//}
 
-int busca_k_esima(arvoreB* r, int k) {
+int busca_k_esima(arvoreB *r, int k) {
     if (r == NULL || k <= 0 || k > contarChaves(r))
         return -1;
 
     int tam_arvore_esq = (r->filho[0] != NULL) ? contarChaves(r->filho[0]) : 0;
-    printf("Tamanho da subtree esquerda = %d\n", tam_arvore_esq);
     int i;
 
     // Find the appropriate child to visit
@@ -42,48 +21,11 @@ int busca_k_esima(arvoreB* r, int k) {
         } else {
             k -= tam_arvore_esq + 1;
             tam_arvore_esq = (r->filho[i + 1] != NULL) ? contarChaves(r->filho[i + 1]) : 0;
-            printf("tam = %d\n", tam_arvore_esq);
         }
     }
+    return busca_k_esima(r->filho[i], k);
 }
 
-void printar_nivel(arvoreB* raiz, int nivel) {
-    if (raiz == NULL)
-        return;
-    if (nivel == 1) {
-        printf("[");
-        for (int i = 0; i < raiz->numChaves; i++)
-            printf("i:%d=(%d) ", i, raiz->chave[i]);
-        printf("] ");
-    }
-    else if (nivel > 1) {
-        for (int i = 0; i < raiz->numChaves + 1; i++)
-            printar_nivel(raiz->filho[i], nivel - 1);
-    }
-}
-
-int altura(arvoreB* raiz) {
-    if (raiz == NULL)
-        return 0;
-    else {
-        int altura_max = 0;
-        for (int i = 0; i < raiz->numChaves + 1; i++) {
-            int altura_filho = altura(raiz->filho[i]);
-            if (altura_filho > altura_max)
-                altura_max = altura_filho;
-        }
-        return altura_max + 1;
-    }
-}
-
-void printar_arvoreB_por_nivel(arvoreB* raiz) {
-    int h = altura(raiz);
-    for (int i = 1; i <= h; i++) {
-        printf("Nivel %d: ", i);
-        printar_nivel(raiz, i);
-        printf("\n");
-    }
-}
 int main(){
     arvoreB* raiz = (arvoreB*)malloc(sizeof(arvoreB));
     raiz->numChaves = 3;
@@ -135,12 +77,13 @@ int main(){
     raiz->filho[1] = c;
     raiz->filho[2] = d;
     raiz->filho[3] = e;
+
     imprimir_arvore(raiz);
     printf("Nos minimos: %d\n", conta_nos_minimo_chaves(raiz));
     printf("Valor maior na arvore: %d\n", proximaChave(raiz, 20));
     printf("Numero de nos: %d\n", contarNosArvoreB(raiz));
     printf("Numero de chaves: %d\n", contarChaves(raiz));
-    printf("Busca k esima chave: %d\n", busca_k_esima(raiz, 13));
+    printf("Busca k esima chave: %d\n", busca_k_esima(raiz, 15));
     printar_arvoreB_por_nivel(raiz);
     limpar_arvore(raiz);
     return 0;

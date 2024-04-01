@@ -263,7 +263,7 @@ int conta_nos_minimo_chaves(arvoreB* r) {
     int count = 0;
 
     // Verificar se o nó atual tem o número mínimo de chaves
-    if (r->numChaves < (ORDEM / 2)) {
+    if ( r->numChaves == (ORDEM/2 + ORDEM%2) - 1 ) {
         count = 1;
     }
 
@@ -295,6 +295,44 @@ arvoreBMais buscaChave(arvoreBMais r, int ch, int* pos) {
     }
 
     return buscaChave(r->ponteiro[i], ch, pos); // Recursão no filho à esquerda da chave
+}
+
+void printar_nivel(arvoreB* raiz, int nivel) {
+    if (raiz == NULL)
+        return;
+    if (nivel == 1) {
+        printf("[");
+        for (int i = 0; i < raiz->numChaves; i++)
+            printf("i:%d=(%d) ", i, raiz->chave[i]);
+        printf("] ");
+    }
+    else if (nivel > 1) {
+        for (int i = 0; i < raiz->numChaves + 1; i++)
+            printar_nivel(raiz->filho[i], nivel - 1);
+    }
+}
+
+int altura(arvoreB* raiz) {
+    if (raiz == NULL)
+        return 0;
+    else {
+        int altura_max = 0;
+        for (int i = 0; i < raiz->numChaves + 1; i++) {
+            int altura_filho = altura(raiz->filho[i]);
+            if (altura_filho > altura_max)
+                altura_max = altura_filho;
+        }
+        return altura_max + 1;
+    }
+}
+
+void printar_arvoreB_por_nivel(arvoreB* raiz) {
+    int h = altura(raiz);
+    for (int i = 1; i <= h; i++) {
+        printf("Nivel %d: ", i);
+        printar_nivel(raiz, i);
+        printf("\n");
+    }
 }
 
 #endif //PROVA_AED_2_ARVOREB_H
