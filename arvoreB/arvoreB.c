@@ -47,6 +47,43 @@ int busca_k_esima(arvoreB* r, int k) {
     }
 }
 
+void printar_nivel(arvoreB* raiz, int nivel) {
+    if (raiz == NULL)
+        return;
+    if (nivel == 1) {
+        printf("[");
+        for (int i = 0; i < raiz->numChaves; i++)
+            printf("i:%d=(%d) ", i, raiz->chave[i]);
+        printf("] ");
+    }
+    else if (nivel > 1) {
+        for (int i = 0; i < raiz->numChaves + 1; i++)
+            printar_nivel(raiz->filho[i], nivel - 1);
+    }
+}
+
+int altura(arvoreB* raiz) {
+    if (raiz == NULL)
+        return 0;
+    else {
+        int altura_max = 0;
+        for (int i = 0; i < raiz->numChaves + 1; i++) {
+            int altura_filho = altura(raiz->filho[i]);
+            if (altura_filho > altura_max)
+                altura_max = altura_filho;
+        }
+        return altura_max + 1;
+    }
+}
+
+void printar_arvoreB_por_nivel(arvoreB* raiz) {
+    int h = altura(raiz);
+    for (int i = 1; i <= h; i++) {
+        printf("Nivel %d: ", i);
+        printar_nivel(raiz, i);
+        printf("\n");
+    }
+}
 int main(){
     arvoreB* raiz = (arvoreB*)malloc(sizeof(arvoreB));
     raiz->numChaves = 3;
@@ -104,6 +141,7 @@ int main(){
     printf("Numero de nos: %d\n", contarNosArvoreB(raiz));
     printf("Numero de chaves: %d\n", contarChaves(raiz));
     printf("Busca k esima chave: %d\n", busca_k_esima(raiz, 13));
+    printar_arvoreB_por_nivel(raiz);
     limpar_arvore(raiz);
     return 0;
 }
