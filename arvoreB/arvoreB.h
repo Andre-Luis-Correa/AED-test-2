@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define ORDEM 4
+#define ORDEM 3
 //Estrutura de nó para árvore B
 //tom uma posição a mais de chave e ponteiro de filho para
 //facilitar implementação da operação split

@@ -4,44 +4,45 @@
 
 #include <stdio.h>
 #include "arvoreB.h"
+//
+//int busca_k_esima(arvoreB* r, int k) {
+//    if (r == NULL || k > contarChaves(r))
+//        return -1;
+//
+//    int tam_arvore_esq = (r->filho[0] != NULL) ? r->filho[0]->numChaves : 0;
+//    printf("Tamanho da subtree esquerda = %d\n", tam_arvore_esq);
+//    int i;
+//
+//    // Find the appropriate child to visit
+//    for (i = 0; i < r->numChaves; i++) {
+//        if (k < tam_arvore_esq) { // a chave está no filho
+//            return busca_k_esima(r->filho[i], k);
+//        } else if (k == tam_arvore_esq && i != r->numChaves) { // Chave está aqui
+//            return r->chave[i];
+//        } else {
+//            k -= tam_arvore_esq + 1;
+//        }
+//    }
+//}
 
-//pré-condição: k > 0
-// Função para buscar a k-ésima chave em uma árvore B
 int busca_k_esima(arvoreB* r, int k) {
-    if (r == NULL || k > contarChaves(r)) {
-        return -1; // Árvore vazia ou valor de k inválido
-    }
+    if (r == NULL || k <= 0 || k > contarChaves(r))
+        return -1;
 
-    if(r->filho[0] == NULL) { // Se for folha, retorna a chave na posição k
-        if (k <= r->numChaves) {
-            return r->chave[k - 1]; // A k-ésima chave está no nó atual
-        }
-    }else{
-        for(int i = 0; i< r->numChaves; i++){
-            printf("%d ", r->chave[i]);
-            return busca_k_esima(r->filho[0], k-1);
-        }
-    }
-}
-
-// Function to perform selection in B-tree
-// Function to perform selection in B-tree
-int select(arvoreB* r, int k) {
-    if (r == NULL || k > contarChaves(r))
-        return -1; // Not found or empty node
-
-    int sizeLeftSubtree = (r->filho[0] != NULL) ? r->filho[0]->numChaves : 0;
-    printf("Tamanho da subtree esquerda = %d\n", sizeLeftSubtree);
+    int tam_arvore_esq = (r->filho[0] != NULL) ? contarChaves(r->filho[0]) : 0;
+    printf("Tamanho da subtree esquerda = %d\n", tam_arvore_esq);
     int i;
 
     // Find the appropriate child to visit
     for (i = 0; i < r->numChaves; i++) {
-        if (k < sizeLeftSubtree) {
-            return select(r->filho[i], k); // Retorna para o filho apropriado
-        } else if (k == sizeLeftSubtree && i != r->numChaves) {
-            return r->chave[i]; // k-ésimo elemento encontrado neste nó
+        if (k <= tam_arvore_esq) { // a chave está no filho
+            return busca_k_esima(r->filho[i], k);
+        } else if (k == tam_arvore_esq + 1) { // Chave está aqui
+            return r->chave[i];
         } else {
-            k -= sizeLeftSubtree + 1; // Incrementa corretamente o tamanho da subárvore
+            k -= tam_arvore_esq + 1;
+            tam_arvore_esq = (r->filho[i + 1] != NULL) ? contarChaves(r->filho[i + 1]) : 0;
+            printf("tam = %d\n", tam_arvore_esq);
         }
     }
 }
@@ -102,8 +103,7 @@ int main(){
     printf("Valor maior na arvore: %d\n", proximaChave(raiz, 20));
     printf("Numero de nos: %d\n", contarNosArvoreB(raiz));
     printf("Numero de chaves: %d\n", contarChaves(raiz));
-    printf("Busca k esima chave: %d\n", busca_k_esima(raiz, 1));
-    printf("Busca k esima chave: %d\n", select(raiz, 10));
+    printf("Busca k esima chave: %d\n", busca_k_esima(raiz, 13));
     limpar_arvore(raiz);
     return 0;
 }
