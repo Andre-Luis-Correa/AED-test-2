@@ -18,6 +18,15 @@ typedef struct no{
     struct no* filho[ORDEM+1];
 } arvoreB;
 
+typedef struct nodeBmais {
+    int chave[ORDEM - 1];
+    void* ponteiro[ORDEM];
+    int eh_folha; // 1 = é folha, 0 = nó interno
+    int numChaves;
+} noBmais;
+
+typedef noBmais* arvoreBMais;
+
 int vazia(arvoreB* r){
     return r == NULL;
 }
@@ -264,6 +273,28 @@ int conta_nos_minimo_chaves(arvoreB* r) {
     }
 
     return count;
+}
+
+arvoreBMais buscaChave(arvoreBMais r, int ch, int* pos) {
+    if (r == NULL) {
+        return NULL; // Árvore vazia
+    }
+
+    int i;
+    for (i = 0; i < r->numChaves; i++) {
+        if (ch == r->chave[i]) {
+            *pos = i; // Posição da chave encontrada
+            return r;
+        } else if (ch < r->chave[i]) {
+            break; // Chave pode estar na subárvore filho[i]
+        }
+    }
+
+    if (r->eh_folha) {
+        return NULL; // Chave não está neste nó folha
+    }
+
+    return buscaChave(r->ponteiro[i], ch, pos); // Recursão no filho à esquerda da chave
 }
 
 #endif //PROVA_AED_2_ARVOREB_H

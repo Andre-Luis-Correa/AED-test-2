@@ -132,7 +132,8 @@ int main(){
     raiz->filho[1] = c;
     raiz->filho[2] = d;
     raiz->filho[3] = e;
-
+    printf("Resultado = %d para k = %d \n", busca_k_esima(raiz, 1), 1);
+    printf("Resultado = %d para k = %d \n", busca_k_esima(raiz, 4), 4);
     imprimir_arvore(raiz);
     printf("Nos minimos: %d\n", conta_nos_minimo_chaves(raiz));
     printf("Valor maior na arvore: %d\n", proximaChave(raiz, 20));
