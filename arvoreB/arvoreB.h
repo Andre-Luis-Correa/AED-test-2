@@ -8,7 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define ORDEM 5
+#define ORDEM 4
 //Estrutura de nó para árvore B
 //tom uma posição a mais de chave e ponteiro de filho para
 //facilitar implementação da operação split
@@ -39,6 +39,20 @@ int contarChaves(arvoreB* raiz) {
     }
 
     return totalChaves;
+}
+
+int contarNosArvoreB(arvoreB* raiz) {
+    if (raiz == NULL) {
+        return 0; // Árvore vazia
+    }
+
+    int nos = 1; // Conta o próprio nó atual
+
+    for (int i = 0; i <= raiz->numChaves; i++) {
+        nos += contarNosArvoreB(raiz->filho[i]); // Recursão nos filhos
+    }
+
+    return nos;
 }
 
 //Quebra o nó x (com overflow) e retorna o nó criado e chave m que
@@ -146,17 +160,17 @@ void limpar_arvore(arvoreB *r) {
     free(r); // Libere o nó atual
 }
 
-void imprimir_arvore(arvoreB *r, int nivel) {
+void imprimir_arvore(arvoreB *r) {
     if (r == NULL) // Caso base: se o nó for nulo, retorne
         return;
 
     int i;
     for (i = 0; i < r->numChaves; i++) {
-        imprimir_arvore(r->filho[i], nivel + 1); // Imprima os filhos recursivamente
+        imprimir_arvore(r->filho[i]); // Imprima os filhos recursivamente
         printf("Chave %d\n", r->chave[i]); // Imprima a chave do nó
     }
 
-    imprimir_arvore(r->filho[i], nivel + 1); // Imprima o último filho recursivamente
+    imprimir_arvore(r->filho[i]); // Imprima o último filho recursivamente
 }
 
 void redistribuirChaves(arvoreB* pai, int pos_filho_esq) {
@@ -212,24 +226,24 @@ void redistribuirChaves(arvoreB* pai, int pos_filho_esq) {
 int proximaChave(arvoreB* r, int val) {
     if (r != NULL) {
         int i;
-        if (r->filho[0] == NULL) { // Se for folha
+        if (r->filho[0] == NULL) {
             for (i = 0; i < r->numChaves; i++) {
-                if (r->chave[i] > val) {
-                    return r->chave[i]; // Retorna a primeira chave maior que val
-                }
+                if (r->chave[i] > val) return r->chave[i];
             }
-            return -1; // Não há chave maior que val
+            return -1;
         }
 
         for (i = 0; i < r->numChaves; i++) {
-            if (r->chave[i] > val) {
-                return proximaChave(r->filho[i], val); // Recursão no filho à esquerda da chave
-            }
+            if (r->chave[i] > val) return r->chave[i];
         }
-        return proximaChave(r->filho[r->numChaves], val); // Recursão no último filho à direita
+
+        // Ajuste para garantir que a recursão seja feita dentro dos limites válidos
+        if (val >= r->chave[r->numChaves - 1]) {
+            return proximaChave(r->filho[r->numChaves], val);
+        }
     }
 
-    return -1; // Árvore vazia
+    return -1;
 }
 
 int conta_nos_minimo_chaves(arvoreB* r) {
@@ -240,7 +254,7 @@ int conta_nos_minimo_chaves(arvoreB* r) {
     int count = 0;
 
     // Verificar se o nó atual tem o número mínimo de chaves
-    if (r->numChaves < (ORDEM) / 2) {
+    if (r->numChaves < (ORDEM / 2)) {
         count = 1;
     }
 
@@ -251,6 +265,5 @@ int conta_nos_minimo_chaves(arvoreB* r) {
 
     return count;
 }
-
 
 #endif //PROVA_AED_2_ARVOREB_H
