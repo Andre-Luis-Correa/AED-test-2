@@ -53,21 +53,21 @@ int main(){
     raiz = insere(raiz, 20);
     raiz = insere(raiz, 70);
     raiz = insere(raiz, 80);
-//    raiz = insere(raiz, 6);
-//    raiz = insere(raiz, 8);
-//    raiz = insere(raiz, 11);
-//    raiz = insere(raiz, 12);
-//    raiz = insere(raiz, 16);
-//    raiz = insere(raiz, 18);
-//    raiz = insere(raiz, 21);
-//    raiz = insere(raiz, 25);
-//    raiz = insere(raiz, 27);
-//    raiz = insere(raiz, 29);
-//    raiz = insere(raiz, 54);
-//    raiz = insere(raiz, 56);
-//    raiz = insere(raiz, 71);
-//    raiz = insere(raiz, 76);
-//    raiz = insere(raiz, 81);
+    raiz = insere(raiz, 6);
+    raiz = insere(raiz, 8);
+    raiz = insere(raiz, 11);
+    raiz = insere(raiz, 12);
+    raiz = insere(raiz, 16);
+    raiz = insere(raiz, 18);
+    raiz = insere(raiz, 21);
+    raiz = insere(raiz, 25);
+    raiz = insere(raiz, 27);
+    raiz = insere(raiz, 29);
+    raiz = insere(raiz, 54);
+    raiz = insere(raiz, 56);
+    raiz = insere(raiz, 71);
+    raiz = insere(raiz, 76);
+    raiz = insere(raiz, 81);
     raiz = insere(raiz, 89);
 
     printf("total chaves: %d\n", contarChaves(raiz));
@@ -82,7 +82,8 @@ int main(){
     int k = 8;
     printf("Ultimo elemento: %d\n", busca_k_esima(raiz, k));
 
+    printf("Nos minimos: %d\n", conta_nos_minimo_chaves(raiz));
     limpar_arvore(raiz);
-
+    printf("Valor maior que 56 na arvore: %d\n", proximaChave(raiz, 50));
     return 0;
 }

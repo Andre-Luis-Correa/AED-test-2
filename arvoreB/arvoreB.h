@@ -63,10 +63,10 @@ arvoreB* split(arvoreB* x, int * m) {
 int buscaPos(arvoreB* r, int info, int * pos) {
     for((*pos)=0; (*pos) < r->numChaves; (*pos)++)
         if(info == r->chave[(*pos)])
-            return 1; // chave já está na árvore
+            return 1; // chave j´a est´a na ´arvore
         else if(info < r->chave[(*pos)])
-            break; // info pode estar na sub-árvore filho[*pos]
-    return 0; // chave n~ao est´a neste nó
+            break; // info pode estar na sub´arvore filho[*pos]
+    return 0; // chave n~ao est´a neste n´o
 }
 
 int eh_folha(arvoreB* r) {
@@ -86,7 +86,7 @@ void adicionaDireita(arvoreB* r, int pos, int k, arvoreB* p){
 
 void insere_aux(arvoreB* r, int info){
     int pos;
-    if(!buscaPos(r,info, &pos)){ // chave não está no nó r
+    if(!buscaPos(r,info, &pos)){ // chave n~ao est´a no n´o r
         if(eh_folha(r)) {
             adicionaDireita(r,pos,info,NULL);
         }
@@ -158,5 +158,99 @@ void imprimir_arvore(arvoreB *r, int nivel) {
 
     imprimir_arvore(r->filho[i], nivel + 1); // Imprima o último filho recursivamente
 }
+
+void redistribuirChaves(arvoreB* pai, int pos_filho_esq) {
+    arvoreB* filho_esq = pai->filho[pos_filho_esq];
+    arvoreB* filho_dir = pai->filho[pos_filho_esq + 1];
+
+    // Caso em que o filho da esquerda tem chaves a menos
+    if (filho_esq->numChaves < (ORDEM/2)) {
+        // Mover a chave do pai para o filho da esquerda
+        filho_esq->chave[filho_esq->numChaves] = pai->chave[pos_filho_esq];
+        filho_esq->numChaves++;
+
+        // Mover a primeira chave do filho da direita para o pai
+        pai->chave[pos_filho_esq] = filho_dir->chave[0];
+
+        // Mover o primeiro filho do filho da direita para o filho da esquerda
+        filho_esq->filho[filho_esq->numChaves] = filho_dir->filho[0];
+
+        // Reposicionar as chaves no filho da direita
+        for (int i = 0; i < filho_dir->numChaves - 1; i++) {
+            filho_dir->chave[i] = filho_dir->chave[i + 1];
+            filho_dir->filho[i] = filho_dir->filho[i + 1];
+        }
+        // Mover o último filho do filho da direita para a posição correta
+        filho_dir->filho[filho_dir->numChaves - 1] = filho_dir->filho[filho_dir->numChaves];
+
+        // Atualizar o número de chaves no filho da direita
+        filho_dir->numChaves--;
+    }
+        // Caso em que o filho da direita tem chaves a menos
+    else {
+        // Mover os filhos do filho da direita para frente
+        for (int i = filho_dir->numChaves; i > 0; i--) {
+            filho_dir->chave[i] = filho_dir->chave[i - 1];
+            filho_dir->filho[i + 1] = filho_dir->filho[i];
+        }
+        // Mover o último filho do filho da esquerda para a primeira posição do filho da direita
+        filho_dir->filho[1] = filho_dir->filho[0];
+        filho_dir->filho[0] = filho_esq->filho[filho_esq->numChaves];
+
+        // Mover a chave do pai para o filho da direita
+        filho_dir->chave[0] = pai->chave[pos_filho_esq];
+        filho_dir->numChaves++;
+
+        // Mover a última chave do filho da esquerda para o pai
+        pai->chave[pos_filho_esq] = filho_esq->chave[filho_esq->numChaves - 1];
+
+        // Atualizar o número de chaves no filho da esquerda
+        filho_esq->numChaves--;
+    }
+}
+
+int proximaChave(arvoreB* r, int val) {
+    if (r != NULL) {
+        int i;
+        if (r->filho[0] == NULL) { // Se for folha
+            for (i = 0; i < r->numChaves; i++) {
+                if (r->chave[i] > val) {
+                    return r->chave[i]; // Retorna a primeira chave maior que val
+                }
+            }
+            return -1; // Não há chave maior que val
+        }
+
+        for (i = 0; i < r->numChaves; i++) {
+            if (r->chave[i] > val) {
+                return proximaChave(r->filho[i], val); // Recursão no filho à esquerda da chave
+            }
+        }
+        return proximaChave(r->filho[r->numChaves], val); // Recursão no último filho à direita
+    }
+
+    return -1; // Árvore vazia
+}
+
+int conta_nos_minimo_chaves(arvoreB* r) {
+    if (r == NULL) {
+        return 0;
+    }
+
+    int count = 0;
+
+    // Verificar se o nó atual tem o número mínimo de chaves
+    if (r->numChaves < (ORDEM) / 2) {
+        count = 1;
+    }
+
+    // Percorrer recursivamente os filhos do nó atual
+    for (int i = 0; i <= r->numChaves; i++) {
+        count += conta_nos_minimo_chaves(r->filho[i]);
+    }
+
+    return count;
+}
+
 
 #endif //PROVA_AED_2_ARVOREB_H

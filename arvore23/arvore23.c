@@ -16,6 +16,10 @@ int main(){
     r = inserir(r, 50);
 
     imprimir_in_order(r);
-
+    printf("\nEssa e a chave minima na arvore 2-3: %d\n", minimo(r));
+    printf("\nEssa e a chave maxima na arvore 2-3: %d\n", maximo(r));
+    printf("\nEsse e o numero total de chaves na arvore 2-3: %d\n", conta_chaves(r));
+    printf("\nEsse e o numero total de nos na arvore 2-3: %d\n", conta_nos(r));
+    imprimir(r);
     return 0;
 }

@@ -183,11 +183,11 @@ int minimo(arvoreAVL r){
 int remover(arvoreAVL *r, int x) {
     if (vazia(*r))
         return 0;
-    else if (x < (*r)->info)
+    else if (x < (*r)->info) {
         if (remover(&((*r)->esq), x)) return atualizar_fb_apos_insercao_direita(r);
-    else if (x > (*r)->info)
+    }else if (x > (*r)->info) {
         if (remover(&((*r)->dir), x)) return atualizar_fb_apos_insercao_esquerda(r);
-    else { // A chave é igual ao valor da raiz
+    }else { // A chave é igual ao valor da raiz
 
         if ((*r)->esq == NULL && (*r)->dir == NULL) { // Nó a ser eliminado é uma folha
             free(*r);
@@ -204,6 +204,7 @@ int remover(arvoreAVL *r, int x) {
             free(temp);
             return 1;
         } else { // Tem ambos os filhos
+            printf("AQUIII\n");
             // Encontra o sucessor na subárvore direita
             (*r)->info = minimo((*r)->dir);
             // Remove o sucessor encontrado da subárvore direita

@@ -165,4 +165,50 @@ void imprimir_in_order(arvore23 raiz) {
     }
 }
 
+int minimo(arvore23 r){
+    if(!vazia(r->esq)){
+        return minimo(r->esq);
+    }
+    return r->chave_esq;
+}
+
+int maximo(arvore23 r){
+    if(!vazia(r->dir)){
+        return maximo(r->dir);
+    } else if(!vazia(r->meio)){
+        return maximo(r->meio);
+    } else if(!vazia(r->esq)){
+        return maximo(r->esq);
+    }
+    return r->chave_dir;
+}
+
+int conta_nos(arvore23 r){
+    if(!vazia(r)){
+        return 1 + conta_nos(r->esq) + conta_nos(r->meio) + conta_nos(r->dir);
+    }
+    return 0;
+}
+
+int conta_chaves(arvore23 r){
+    if(!vazia(r)){
+        return r->n + conta_chaves(r->esq) + conta_chaves(r->meio) + conta_chaves(r->dir);
+    }
+    return 0;
+}
+
+void imprimir(arvore23 r){
+    if( !vazia(r) ){
+        imprimir(r->esq);
+        printf("%d ", r->chave_esq);
+
+        imprimir(r->meio);
+
+        if(r->n == 2)
+            printf("%d ", r->chave_dir);
+
+        imprimir(r->dir);
+    }
+}
+
 #endif //PROVA_AED_2_ARVORE23_H
