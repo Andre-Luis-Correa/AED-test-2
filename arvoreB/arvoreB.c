@@ -79,6 +79,7 @@ int main(){
     raiz->filho[3] = e;
 
     imprimir_arvore(raiz);
+    imprimir_chaves_no(raiz, 23, 30);
     printf("Soma = %d\n", soma(raiz));
     printf("Nos minimos: %d\n", conta_nos_minimo_chaves(raiz));
     printf("Valor maior na arvore: %d\n", proximaChave(raiz, 20));

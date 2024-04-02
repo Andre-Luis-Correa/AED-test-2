@@ -297,6 +297,41 @@ arvoreBMais buscaChave(arvoreBMais r, int ch, int* pos) {
     return buscaChave(r->ponteiro[i], ch, pos); // Recursão no filho à esquerda da chave
 }
 
+// Encontre a folha
+arvoreBMais encontrarFolha(arvoreBMais raiz, int chave, int *pos) {
+    if (raiz == NULL) {
+        printf("Árvore vazia.\n");
+        return raiz;
+    }
+
+    arvoreBMais atual = raiz;
+    // Percorre a árvore até chegar a uma folha
+    while (!atual->eh_folha) {
+        int i;
+        // Encontra a posição do próximo nó filho a ser visitado
+        for (i = 0; i < atual->numChaves; i++) {
+            if (chave < atual->chave[i])
+                break;
+        }
+
+        // Move para o próximo nó filho
+        atual = (noBmais *) atual->ponteiro[i];
+    }
+
+    // Busca a chave na folha
+    int i;
+    for (i = 0; i < atual->numChaves; i++) {
+        if (chave == atual->chave[i]) {
+            // Atualiza o valor de pos com a posição da chave na folha
+            if (pos != NULL)
+                *pos = i;
+            return atual; // Retorna o nó atual se a chave for encontrada
+        }
+    }
+
+    return NULL; // Retorna NULL se a chave não foi encontrada
+}
+
 void printar_nivel(arvoreB* raiz, int nivel) {
     if (raiz == NULL)
         return;
@@ -355,5 +390,94 @@ int soma(arvoreB* r) {
     return sum;
 }
 
+void imprimir_chaves_no(arvoreB* r, int a, int b) {
+    if (r == NULL) {
+        return;
+    }
+
+    // Verifica se o intervalo [a, b] intersecta com o intervalo do nó atual
+    if (r->chave[0] > b || r->chave[r->numChaves - 1] < a) {
+        return; // Não há interseção, não é necessário continuar nesta subárvore
+    }
+
+    // Percorre os filhos que intersectam com o intervalo
+    for (int i = 0; i < r->numChaves; i++) {
+        imprimir_chaves_no(r->filho[i], a, b);
+        if (r->chave[i] >= a && r->chave[i] <= b) {
+            printf("%d ", r->chave[i]);
+        }
+    }
+
+    // Último filho
+    imprimir_chaves_no(r->filho[r->numChaves], a, b);
+}
+
+void concat_nodes(int index, arvoreB * r){
+    if(r == NULL){
+        return;
+    }
+
+    arvoreB * left_child = r->filho[index];
+    arvoreB * right_child = r->filho[1];
+
+    left_child->chave[left_child->numChaves] = r->chave[index];
+
+    for(int i = 0; i < right_child->numChaves; i++){
+        left_child->chave[left_child->numChaves + i + 1] = right_child->chave[i];
+        left_child->filho[left_child->numChaves + i + 1] = right_child->filho[i];
+    }
+
+    left_child->filho[left_child->numChaves + right_child->numChaves + 1] = right_child->filho[right_child->numChaves];
+
+    left_child->numChaves += right_child->numChaves + 1;
+
+    for(int i = index + 1; i < r->numChaves; i++){
+        r->chave[i - 1] = r->chave[i];
+        r->filho[i - 1] = r->filho[i + 1];
+    }
+
+    r->numChaves--;
+
+    free(right_child);
+
+}
+
+// void imprimirMaiores(arvoreB r, int k); // imprimir maior que k evitando nós desnecessários
+// int contarFolhas(arvoreBMais) // conta o número de folhas em uma arvore b mais
+// Função para imprimir chaves maiores que k
+void imprimirMaiores(arvoreB* raiz, int k) {
+    if (raiz == NULL) {
+        return;
+    }
+
+    int i;
+    for (i = 0; i < raiz->numChaves; i++) {
+        if (raiz->chave[i] > k) {
+            printf("%d ", raiz->chave[i]);
+        }
+    }
+
+    for (i = 0; i <= raiz->numChaves; i++) {
+        imprimirMaiores(raiz->filho[i], k);
+    }
+}
+
+// Função para contar o número de folhas em uma árvore B+
+int contarFolhas(arvoreBMais raiz) {
+    if (raiz == NULL) {
+        return 0;
+    }
+
+    if (raiz->eh_folha) {
+        return 1;
+    }
+
+    int totalFolhas = 0;
+    for (int i = 0; i <= raiz->numChaves; i++) {
+        totalFolhas += contarFolhas((noBmais*)raiz->ponteiro[i]);
+    }
+
+    return totalFolhas;
+}
 
 #endif //PROVA_AED_2_ARVOREB_H
