@@ -14,6 +14,8 @@ int main(){
     r = inserir(r, 30);
     r = inserir(r, 25);
     r = inserir(r, 50);
+    r = inserir(r, 5);
+    r = inserir(r, 90);
 
     imprimir_in_order(r);
     printf("\n");

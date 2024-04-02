@@ -250,7 +250,8 @@ int soma_intervalo(arvore r, int a, int b){
     return soma_intervalo(r->esq, a, b) + soma_intervalo(r->dir, a, b); // Caso a chave não esteja no intervalo
 }
 
-int soma_nos_intervalo(arvore r, int a, int b) {
+int soma_nos_intervalo(arvore r, int a, int b)
+
     if (r == NULL) {
         return 0;
     }

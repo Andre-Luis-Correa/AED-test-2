@@ -33,27 +33,13 @@ arvoreAVL rotacaoDireita(arvoreAVL p){
 }
 
 arvoreAVL rotacaoDireitaEsquerda(arvoreAVL p) {
-    arvoreAVL u = p->dir;
-    arvoreAVL v = u->esq;
-    arvoreAVL t2 = v->esq;
-    arvoreAVL t3 = v->dir;
-    p->dir = t2;
-    u->esq = t3;
-    v->esq = p;
-    v->dir = u;
-    return v;
+    p->dir = rotacaoDireita(p->dir); // Rotação à direita no filho direito
+    return rotacaoEsquerda(p); // Rotação à esquerda no nó atual
 }
 
 arvoreAVL rotacaoEsquerdaDireita(arvoreAVL p) {
-    arvoreAVL u = p->esq;
-    arvoreAVL v = u->dir;
-    arvoreAVL t2 = v->esq;
-    arvoreAVL t3 = v->dir;
-    p->esq = t3;
-    u->dir = t2;
-    v->esq = u;
-    v->dir = p;
-    return v;
+    p->esq = rotacaoEsquerda(p->esq); // Rotação à esquerda no filho esquerdo
+    return rotacaoDireita(p); // Rotação à direita no nó atual
 }
 
 int vazia(arvoreAVL r){

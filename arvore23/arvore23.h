@@ -175,11 +175,13 @@ int minimo(arvore23 r){
 int maximo(arvore23 r){
     if(!vazia(r->dir)){
         return maximo(r->dir);
-    } else if(!vazia(r->meio)){
+    } else if(!vazia(r->meio)) {
         return maximo(r->meio);
-    } else if(!vazia(r->esq)){
-        return maximo(r->esq);
     }
+    if(r->n == 1) return r->chave_esq;
+//    } else if(!vazia(r->esq)){
+//        return maximo(r->esq);
+//    }
     return r->chave_dir;
 }
 
@@ -222,6 +224,7 @@ int soma(arvore23 r){
 
 void imprimir_intervalo(arvore23 r, int a, int b) {
     if (vazia(r)) {
+
         return;
     }
 

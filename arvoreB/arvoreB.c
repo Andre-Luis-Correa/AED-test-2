@@ -47,8 +47,8 @@ int main(){
     c->numChaves = 3;
     c->chave[0] = 16;
     c->chave[1] = 17;
-    c->chave[2] = 18;
     c->filho[0] = NULL;
+    c->chave[2] = 18;
     c->filho[1] = NULL;
     c->filho[2] = NULL;
     c->filho[3] = NULL;
@@ -80,9 +80,11 @@ int main(){
 
     imprimir_arvore(raiz);
     imprimir_chaves_no(raiz, 23, 30);
-    printf("Soma = %d\n", soma(raiz));
+    printf("\n");
+    imprimirMaiores(raiz, 26);
+    printf("\nSoma = %d\n", soma(raiz));
     printf("Nos minimos: %d\n", conta_nos_minimo_chaves(raiz));
-    printf("Valor maior na arvore: %d\n", proximaChave(raiz, 20));
+    printf("Valor maior na arvore: %d\n", proximaChave(raiz, 26));
     printf("Numero de nos: %d\n", contarNosArvoreB(raiz));
     printf("Numero de chaves: %d\n", contarChaves(raiz));
     printf("Busca k esima chave: %d\n", busca_k_esima(raiz, 15));
