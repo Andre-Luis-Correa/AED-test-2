@@ -263,7 +263,7 @@ int conta_nos_minimo_chaves(arvoreB* r) {
     int count = 0;
 
     // Verificar se o nó atual tem o número mínimo de chaves
-    if ( r->numChaves == (ORDEM/2 + ORDEM%2) - 1 ) {
+    if ( (r->filho[0] != NULL) && (r->numChaves == (ORDEM/2 + ORDEM%2) - 1) ) {
         count = 1;
     }
 
@@ -334,5 +334,26 @@ void printar_arvoreB_por_nivel(arvoreB* raiz) {
         printf("\n");
     }
 }
+
+int soma(arvoreB* r) {
+    if (vazia(r)) {
+        return 0;
+    }
+
+    int sum = 0;
+
+    // Soma as chaves válidas no nó atual
+    for (int i = 0; i < r->numChaves; i++) {
+        sum += r->chave[i];
+    }
+
+    // Percorre os filhos apenas se necessário
+    for (int i = 0; i <= r->numChaves; i++) {
+        sum += soma(r->filho[i]);
+    }
+
+    return sum;
+}
+
 
 #endif //PROVA_AED_2_ARVOREB_H

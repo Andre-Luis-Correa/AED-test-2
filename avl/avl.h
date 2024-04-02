@@ -225,4 +225,9 @@ void imprimir(arvoreAVL r){
     }
 }
 
+int soma(arvoreAVL r){
+    if(vazia(r)) return 0;
+    return r->info + soma(r->esq) + soma(r->dir);
+}
+
 #endif //PROVA_AED_2_AVL_H

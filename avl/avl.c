@@ -13,7 +13,7 @@ int main(){
     insercao(&r, 27);
     insercao(&r, 11);
     insercao(&r, 31);
-
+    printf("Soma = %d\n", soma(r));
     imprimir(r);
     printf("\n");
     printf("%d\n", remover(&r, 27));

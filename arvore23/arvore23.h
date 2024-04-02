@@ -211,4 +211,43 @@ void imprimir(arvore23 r){
     }
 }
 
+int soma(arvore23 r){
+    if(vazia(r)) return 0;
+
+    int sum = r->chave_esq;
+    if(r->n == 2) sum += r->chave_dir;
+
+    return sum + soma(r->esq) + soma(r->meio) + soma(r->dir);
+}
+
+void imprimir_intervalo(arvore23 r, int a, int b) {
+    if (vazia(r)) {
+        return;
+    }
+
+    // Verifica se o intervalo [a, b] intersecta com o intervalo da árvore r
+    if (r->chave_esq > b || r->chave_dir < a) {
+        return; // Não há interseção, não é necessário percorrer esta subárvore
+    }
+
+    // Imprime as chaves dentro do intervalo [a, b]
+    if (r->chave_esq >= a && r->chave_esq <= b) {
+        printf("%d ", r->chave_esq);
+    }
+    if (r->n == 2 && r->chave_dir >= a && r->chave_dir <= b) {
+        printf("%d ", r->chave_dir);
+    }
+
+    // Percorre os filhos
+    imprimir_intervalo(r->esq, a, b);
+    imprimir_intervalo(r->meio, a, b);
+    imprimir_intervalo(r->dir, a, b);
+}
+
+int altura(arvore23 r){
+    if(vazia(r)) return 0;
+
+    return 1 + altura(r->esq);
+}
+
 #endif //PROVA_AED_2_ARVORE23_H
