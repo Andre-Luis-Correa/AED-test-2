@@ -224,27 +224,26 @@ int soma(arvore23 r){
 
 void imprimir_intervalo(arvore23 r, int a, int b) {
     if (vazia(r)) {
-
         return;
     }
 
-    // Verifica se o intervalo [a, b] intersecta com o intervalo da árvore r
-    if (r->chave_esq > b || r->chave_dir < a) {
-        return; // Não há interseção, não é necessário percorrer esta subárvore
-    }
+    if (r->chave_esq > b) {
+        imprimir_intervalo(r->esq, a, b);
+    } else if (r->n == 2 && r->chave_dir < a){
+        imprimir_intervalo(r->dir, a, b);
+    }else{
+        imprimir_intervalo(r->esq, a, b);
+        if (r->chave_esq > a && r->chave_esq < b) {
+            printf("%d ", r->chave_esq);
+        }
 
-    // Imprime as chaves dentro do intervalo [a, b]
-    if (r->chave_esq >= a && r->chave_esq <= b) {
-        printf("%d ", r->chave_esq);
-    }
-    if (r->n == 2 && r->chave_dir >= a && r->chave_dir <= b) {
-        printf("%d ", r->chave_dir);
-    }
+        imprimir_intervalo(r->meio, a, b);
 
-    // Percorre os filhos
-    imprimir_intervalo(r->esq, a, b);
-    imprimir_intervalo(r->meio, a, b);
-    imprimir_intervalo(r->dir, a, b);
+        if (r->n == 2 && r->chave_dir > a && r->chave_dir < b) {
+            printf("%d ", r->chave_dir);
+        }
+        imprimir_intervalo(r->dir, a, b);
+    }
 }
 
 int altura(arvore23 r){

@@ -26,7 +26,7 @@ int overflow(arvoreB* r){
     r->numChaves == ORDEM;
 }
 
-// Função para contar o número total de chaves em uma árvore B
+// Função para contar o número total de chaves em uma árvore Bimpri
 int contarChaves(arvoreB* raiz) {
     if (raiz == NULL)
         return 0;
@@ -208,13 +208,14 @@ void redistribuirChaves(arvoreB* pai, int pos_filho_esq) {
             filho_dir->chave[i] = filho_dir->chave[i - 1];
             filho_dir->filho[i + 1] = filho_dir->filho[i];
         }
-        // Mover o último filho do filho da esquerda para a primeira posição do filho da direita
         filho_dir->filho[1] = filho_dir->filho[0];
-        filho_dir->filho[0] = filho_esq->filho[filho_esq->numChaves];
 
         // Mover a chave do pai para o filho da direita
         filho_dir->chave[0] = pai->chave[pos_filho_esq];
         filho_dir->numChaves++;
+
+        // Mover o último filho do filho da esquerda para a primeira posição do filho da direita
+        filho_dir->filho[0] = filho_esq->filho[filho_esq->numChaves];
 
         // Mover a última chave do filho da esquerda para o pai
         pai->chave[pos_filho_esq] = filho_esq->chave[filho_esq->numChaves - 1];
@@ -330,22 +331,23 @@ void imprimir_chaves_no(arvoreB* r, int a, int b) {
         return;
     }
 
-    // Verifica se o intervalo [a, b] intersecta com o intervalo do nó atual
-    if (r->chave[0] > b || r->chave[r->numChaves - 1] < a) {
-        return; // Não há interseção, não é necessário continuar nesta subárvore
-    }
-
-    // Percorre os filhos que intersectam com o intervalo
-    for (int i = 0; i < r->numChaves; i++) {
-        imprimir_chaves_no(r->filho[i], a, b);
-        if (r->chave[i] >= a && r->chave[i] <= b) {
-            printf("%d ", r->chave[i]);
+    if (r->chave[0] > b) {
+        imprimir_chaves_no(r->filho[0], a, b);
+    } else if (r->chave[r->numChaves - 1] < a) {
+        imprimir_chaves_no(r->filho[r->numChaves], a, b);
+    }else{
+        // Verifica se o intervalo [a, b] intersecta com o intervalo do nó atual
+        for (int i = 0; i < r->numChaves; i++) {
+            imprimir_chaves_no(r->filho[i], a, b);
+            if (r->chave[i] > a && r->chave[i] < b) {
+                printf("%d ", r->chave[i]);
+            }
         }
     }
-
     // Último filho
     imprimir_chaves_no(r->filho[r->numChaves], a, b);
 }
+
 
 void concat_nodes(int index, arvoreB * r){
     if(r == NULL){
@@ -384,16 +386,15 @@ void imprimirMaiores(arvoreB* raiz, int k) {
         return;
     }
 
-    int i;
-
-    for (i = 0; i < raiz->numChaves; i++) {
-        if(raiz->chave[i] > k) imprimirMaiores(raiz->filho[i], k);
+    for (int i = 0; i < raiz->numChaves; i++) {
         if (raiz->chave[i] > k) {
+            imprimirMaiores(raiz->filho[i], k);
             printf("%d ", raiz->chave[i]);
         }
     }
 
-    imprimirMaiores(raiz->filho[i], k);
+    imprimirMaiores(raiz->filho[raiz->numChaves], k);
 }
+
 
 #endif //PROVA_AED_2_ARVOREB_H

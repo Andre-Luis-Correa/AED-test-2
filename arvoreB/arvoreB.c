@@ -26,6 +26,52 @@ int busca_k_esima(arvoreB *r, int k) {
     return busca_k_esima(r->filho[i], k);
 }
 
+int contar(arvoreB * r){
+    if(r == NULL) return 0;
+
+    int count = r->numChaves;
+
+    for(int i = 0; i <= r->numChaves; i++){
+        count += contar(r->filho[i]);
+    }
+
+    return count;
+}
+
+
+int busca_chave(arvoreB * r, int k){
+    if(r == NULL || k > contar(r)) return -1;
+
+    int tam_esq = r->filho[0] != NULL ? contar(r->filho[0]) : 0;
+    int i;
+
+    for(i=0; i < r->numChaves; i++){
+        if( k >= tam_esq){
+            return busca_chave(r->filho[i], k);
+        }
+        else if( k == tam_esq+1) return r->chave[i];
+        else{
+            k -= tam_esq+1;
+            tam_esq = r->filho[i+1] != NULL ? r->filho[i+1]->numChaves : 0;
+        }
+    }
+
+    return busca_chave(r->filho[i], k);
+}
+
+void imprimirIntervalo(arvoreB *r, int a, int b) {
+    if (r!= NULL) {
+        int i = 0;
+        while (i < r->numChaves && r->chave[i] < a) i++;
+
+        while (i < r->numChaves && r->chave[i] < b) {
+            printf("%d ", r->chave[i]);
+            i++;
+        }
+        imprimirIntervalo(r->filho[i], a, b);
+    }
+}
+
 int main(){
     arvoreB* raiz = (arvoreB*)malloc(sizeof(arvoreB));
     raiz->numChaves = 3;
@@ -77,11 +123,14 @@ int main(){
     raiz->filho[1] = c;
     raiz->filho[2] = d;
     raiz->filho[3] = e;
-
-    imprimir_arvore(raiz);
-    imprimir_chaves_no(raiz, 23, 30);
     printf("\n");
-    imprimirMaiores(raiz, 26);
+    imprimir_arvore(raiz);
+    printf("\nBruna: ");
+    imprimirIntervalo(raiz, 11, 22);
+    printf("\n\nAndré: ");
+    imprimir_chaves_no(raiz, 5, 14);
+    printf("\n\n");
+    imprimirMaiores(raiz, 16);
     printf("\nSoma = %d\n", soma(raiz));
     printf("Nos minimos: %d\n", conta_nos_minimo_chaves(raiz));
     printf("Valor maior na arvore: %d\n", proximaChave(raiz, 26));
